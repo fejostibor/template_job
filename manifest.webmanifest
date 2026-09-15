@@ -1,0 +1,23 @@
+{
+  "name": "Szorzó Manó – szorzótábla gyakorló",
+  "short_name": "Szorzó Manó",
+  "description": "Játékos szorzótábla-gyakorló 1-től 10-ig, alsó tagozatosoknak. Offline is működik.",
+  "lang": "hu",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f2ff",
+  "theme_color": "#7C5CFF",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Gyakorlás", "short_name": "Gyakorlás", "url": "./index.html#practice", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Villámkör", "short_name": "Villám", "url": "./index.html#flash", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
