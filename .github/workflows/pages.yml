@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - claude/szorzotabla-gyakorlo-app-skaonr
   workflow_dispatch:
 
 permissions:

@@ -18,11 +18,18 @@ teljes képernyőn, offline is.
 
 ### Közzététel GitHub Pages-en
 
-A `.github/workflows/pages.yml` minden pusholásnál kiteszi az appot GitHub Pages-re
-(`https://<felhasználó>.github.io/<repo>/`). Az első futás be is kapcsolja a Pages-t,
-ha a repo beállításai engedik; ha nem, a **Settings → Pages → Source: GitHub Actions**
-beállítás után újra kell futtatni. Az app relatív útvonalakat használ, ezért alkönyvtárból
-kiszolgálva is működik — a service workerrel együtt.
+A `.github/workflows/pages.yml` a `master` ágra pusholva (vagy kézzel indítva) kiteszi
+az appot GitHub Pages-re: `https://<felhasználó>.github.io/<repo>/`. Az első futás be is
+kapcsolja a Pages-t, ha a repo beállításai engedik; ha nem, a
+**Settings → Pages → Source: GitHub Actions** beállítás után kell újrafuttatni.
+
+A workflow szándékosan csak a `master`-ről fut: a GitHub a `github-pages` környezetet
+alapértelmezés szerint az alapértelmezett ágra korlátozza, más ágról a telepítés
+környezetvédelmi hibával elszáll. Ha mégis feature ágról szeretnél telepíteni, vedd fel
+az ágat a **Settings → Environments → github-pages → Deployment branches** listára.
+
+Az app relatív útvonalakat használ, ezért alkönyvtárból kiszolgálva is működik — a service
+workerrel és az offline móddal együtt.
 
 ## Mit tud
 
