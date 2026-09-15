@@ -40,6 +40,7 @@ workerrel és az offline móddal együtt.
 | ⚡ **Villámkör** | 60 másodperc, minél több jó válasz — a gyorsaság (automatizáció) fejlesztésére. |
 | 🏆 **Mestervizsga** | 12 feladat egy táblából, választós tippelés nélkül. Max. 1 hiba fér bele → 3. csillag + 20 érme. |
 | 🩹 **Gyenge pontok** | Célzott kör a 10 legproblémásabb műveletből. |
+| 📋 **Szorzótáblák** | Mind a 10 tábla egy helyen, kétféle nézetben: táblánkénti listák (ugrósávval) és a teljes 10×10-es táblázat kiemelt négyzetszámokkal. Csillag jelöli, ami már biztosan megy. |
 | 🗺️ **Szorzó-térkép** | 10×10-es hőtérkép: egy pillantásra látszik, mi megy már és mi nem. |
 | 🎁 **Matricák** | 20 gyűjthető matrica érmékért, szintekért, sorozatért, vizsgákért. |
 | ⚙️ **Beállítások** | Hang, rezgés, tippek, napi cél, feladat/kör — és egy **szülői nézet** (pontosság, napi bontás, aktuális gyenge pontok). |
@@ -64,6 +65,9 @@ elemekre épül:
   *biztos és* átlagosan 4 másodpercen belüli — a cél az automatikus előhívás.
 - **Hibajavító ismétlés.** Az elrontott művelet még ugyanabban a körben visszajön, más
   feladattípusban (pl. választósból beírósra váltva).
+- **A magyarázat nem siet.** Hibás válasz után a jó megoldás és a trükk addig marad a
+  képernyőn, amíg a gyerek rá nem koppint a Tovább gombra – villámkörben ilyenkor az
+  óra is megáll, hogy az olvasás ne kerüljön időbe.
 - **Rövid, napi adagok.** Napi cél + sorozat („streak”) — 5–10 perc naponta többet ér,
   mint hetente egy hosszú ülés.
 

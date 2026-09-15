@@ -128,6 +128,7 @@
           modeBtn('flashBtn', '⚡', 'Villámkör', '60 másodperc, hány jó válasz fér bele?') +
           modeBtn('examBtn', '🏆', 'Mestervizsga', 'Tedd le a vizsgát egy táblából!') +
           modeBtn('weakBtn', '🩹', 'Gyenge pontok', 'A legnehezebb 10 művelet gyakorlása') +
+          modeBtn('chartsBtn', '📋', 'Szorzótáblák', 'Mind a 10 tábla egy helyen') +
           modeBtn('mapBtn', '🗺️', 'Szorzó-térkép', 'Melyik művelet megy már jól?') +
           modeBtn('stickerBtn', '🎁', 'Matricák', S.data.stickers.length + ' / ' + STICKERS.length + ' összegyűjtve') +
           modeBtn('setBtn', '⚙️', 'Beállítások', 'Hang, napi cél, szülői nézet') +
@@ -156,6 +157,7 @@
         if (!w.length) { FX.toast('Még nincs gyenge pont – gyakorolj egy kicsit! 🙂'); return; }
         global.SZ.quiz.start({ mode: 'practice', weak: w, count: 10, title: 'Gyenge pontok', tables: w.map(function (x) { return x.a; }) });
       });
+      $('chartsBtn').addEventListener('click', function () { go('charts'); });
       $('mapBtn').addEventListener('click', function () { go('map'); });
       $('stickerBtn').addEventListener('click', function () { go('stickers'); });
       $('setBtn').addEventListener('click', function () { go('settings'); });
@@ -397,6 +399,94 @@
     }
   };
 
+  /* ---------------- Szorzótáblák (áttekintő) ---------------- */
+  var chartView = 'list';   // 'list' | 'grid'
+
+  function chartCards() {
+    var html = '<div class="chart-grid">';
+    for (var t = 1; t <= 10; t++) {
+      var pr = F.tableProgress(t);
+      html += '<section class="tcard" id="tab' + t + '">' +
+        '<header style="background:linear-gradient(135deg,' + tcolor(t) + ',color-mix(in srgb,' + tcolor(t) + ' 62%, #ffffff))">' +
+          '<b>' + t + '-es tábla</b><span>' + F.TABLE_NICK[t] + ' · ' + pr.pct + '%</span>' +
+        '</header><ul>';
+      for (var i = 1; i <= 10; i++) {
+        var done = F.mastery(t, i) >= 5;
+        html += '<li' + (done ? ' class="done"' : '') + '>' +
+          '<span class="n">' + t + '</span>' +
+          '<span class="op">×</span>' +
+          '<span class="n">' + i + '</span>' +
+          '<span class="op">=</span>' +
+          '<span class="p">' + (t * i) + '</span>' +
+          '<span class="st">' + (done ? '⭐' : '') + '</span>' +
+        '</li>';
+      }
+      html += '</ul></section>';
+    }
+    return html + '</div>';
+  }
+
+  function chartTable() {
+    var html = '<div class="card grid-wrap"><table class="gtable"><thead><tr><th class="corner">×</th>';
+    for (var c = 1; c <= 10; c++) {
+      html += '<th style="background:' + tcolor(c) + '">' + c + '</th>';
+    }
+    html += '</tr></thead><tbody>';
+    for (var r = 1; r <= 10; r++) {
+      html += '<tr><th style="background:' + tcolor(r) + '">' + r + '</th>';
+      for (var c2 = 1; c2 <= 10; c2++) {
+        html += '<td' + (r === c2 ? ' class="sq"' : '') + '>' + (r * c2) + '</td>';
+      }
+      html += '</tr>';
+    }
+    return html + '</tbody></table></div>' +
+      '<p class="small muted center">A kiemelt átló a négyzetszámok: 1, 4, 9, 16 … Ezeket érdemes fejből tudni. ' +
+      'A táblázat tükrös az átlóra – ezért ugyanaz a 3×7 és a 7×3.</p>';
+  }
+
+  var charts = {
+    title: 'Szorzótáblák',
+    back: true,
+    html: function () {
+      return '' +
+      '<div class="stack fade-in">' +
+        '<h2>Szorzótáblák 1-től 10-ig</h2>' +
+        '<p class="small muted">Itt egyben megtalálod az összes táblát. A ⭐ azt jelöli, amit már biztosan tudsz.</p>' +
+        '<div class="view-toggle" role="group" aria-label="Nézet">' +
+          '<button type="button" id="viewList" aria-pressed="' + (chartView === 'list' ? 'true' : 'false') + '">📋 Táblánként</button>' +
+          '<button type="button" id="viewGrid" aria-pressed="' + (chartView === 'grid' ? 'true' : 'false') + '">🔢 Nagy táblázat</button>' +
+        '</div>' +
+        (chartView === 'list'
+          ? '<div class="jump" id="jumpNav" aria-label="Ugrás táblához">' +
+              [1,2,3,4,5,6,7,8,9,10].map(function (t) {
+                return '<button type="button" data-j="' + t + '" style="background:linear-gradient(135deg,' + tcolor(t) + ',color-mix(in srgb,' + tcolor(t) + ' 62%, #ffffff))">' + t + '</button>';
+              }).join('') +
+            '</div>'
+          : '') +
+        '<div id="chartBody">' + (chartView === 'list' ? chartCards() : chartTable()) + '</div>' +
+      '</div>';
+    },
+    mount: function () {
+      function swap(v) {
+        chartView = v;
+        FX.play('tap');
+        global.SZ.ui.go('charts', {}, true);
+      }
+      $('viewList').addEventListener('click', function () { if (chartView !== 'list') swap('list'); });
+      $('viewGrid').addEventListener('click', function () { if (chartView !== 'grid') swap('grid'); });
+      var nav = $('jumpNav');
+      if (nav) {
+        Array.prototype.forEach.call(nav.querySelectorAll('button'), function (b) {
+          b.addEventListener('click', function () {
+            var el = document.getElementById('tab' + b.dataset.j);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            FX.play('tap');
+          });
+        });
+      }
+    }
+  };
+
   /* ---------------- Térkép ---------------- */
   var map = {
     title: 'Szorzó-térkép',
@@ -566,7 +656,7 @@
 
   global.SZ.screens = {
     home: home, tables: tables, learn: learn, result: result,
-    map: map, stickers: stickers, settings: settings,
+    map: map, charts: charts, stickers: stickers, settings: settings,
     checkStickers: checkStickers, STICKERS: STICKERS
   };
 })(window);

@@ -1,6 +1,6 @@
 /* Szorzó Manó – service worker
    Alkalmazás-héj gyorsítótárazása, hogy net nélkül is menjen. */
-var CACHE = 'szorzo-mano-v1';
+var CACHE = 'szorzo-mano-v2';
 var ASSETS = [
   './',
   './index.html',
