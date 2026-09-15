@@ -16,6 +16,21 @@ npx http-server -p 8080 .
 Telefonon: nyisd meg a címet, majd **„Hozzáadás a kezdőképernyőhöz”**. Onnantól ikonról indul,
 teljes képernyőn, offline is.
 
+### Közzététel GitHub Pages-en
+
+A `.github/workflows/pages.yml` a `master` ágra pusholva (vagy kézzel indítva) kiteszi
+az appot GitHub Pages-re: `https://<felhasználó>.github.io/<repo>/`. Az első futás be is
+kapcsolja a Pages-t, ha a repo beállításai engedik; ha nem, a
+**Settings → Pages → Source: GitHub Actions** beállítás után kell újrafuttatni.
+
+A workflow szándékosan csak a `master`-ről fut: a GitHub a `github-pages` környezetet
+alapértelmezés szerint az alapértelmezett ágra korlátozza, más ágról a telepítés
+környezetvédelmi hibával elszáll. Ha mégis feature ágról szeretnél telepíteni, vedd fel
+az ágat a **Settings → Environments → github-pages → Deployment branches** listára.
+
+Az app relatív útvonalakat használ, ezért alkönyvtárból kiszolgálva is működik — a service
+workerrel és az offline móddal együtt.
+
 ## Mit tud
 
 | Mód | Mire jó |
@@ -25,6 +40,7 @@ teljes képernyőn, offline is.
 | ⚡ **Villámkör** | 60 másodperc, minél több jó válasz — a gyorsaság (automatizáció) fejlesztésére. |
 | 🏆 **Mestervizsga** | 12 feladat egy táblából, választós tippelés nélkül. Max. 1 hiba fér bele → 3. csillag + 20 érme. |
 | 🩹 **Gyenge pontok** | Célzott kör a 10 legproblémásabb műveletből. |
+| 📋 **Szorzótáblák** | Mind a 10 tábla egy helyen, kétféle nézetben: táblánkénti listák (ugrósávval) és a teljes 10×10-es táblázat kiemelt négyzetszámokkal. Csillag jelöli, ami már biztosan megy. |
 | 🗺️ **Szorzó-térkép** | 10×10-es hőtérkép: egy pillantásra látszik, mi megy már és mi nem. |
 | 🎁 **Matricák** | 20 gyűjthető matrica érmékért, szintekért, sorozatért, vizsgákért. |
 | ⚙️ **Beállítások** | Hang, rezgés, tippek, napi cél, feladat/kör — és egy **szülői nézet** (pontosság, napi bontás, aktuális gyenge pontok). |
@@ -49,6 +65,9 @@ elemekre épül:
   *biztos és* átlagosan 4 másodpercen belüli — a cél az automatikus előhívás.
 - **Hibajavító ismétlés.** Az elrontott művelet még ugyanabban a körben visszajön, más
   feladattípusban (pl. választósból beírósra váltva).
+- **A magyarázat nem siet.** Hibás válasz után a jó megoldás és a trükk addig marad a
+  képernyőn, amíg a gyerek rá nem koppint a Tovább gombra – villámkörben ilyenkor az
+  óra is megáll, hogy az olvasás ne kerüljön időbe.
 - **Rövid, napi adagok.** Napi cél + sorozat („streak”) — 5–10 perc naponta többet ér,
   mint hetente egy hosszú ülés.
 

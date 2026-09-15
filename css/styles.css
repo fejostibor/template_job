@@ -311,6 +311,60 @@ h3 { font-size: 1rem; font-weight: 800; }
 }
 .skipline span.now { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; border-color: transparent; transform: scale(1.08); }
 
+/* ---------- Szorzótáblák (áttekintő) ---------- */
+.jump { display: flex; gap: 6px; flex-wrap: wrap; }
+.jump button {
+  border: 0; cursor: pointer; font-family: var(--font); font-weight: 900;
+  width: 38px; height: 38px; border-radius: 12px; color: #fff; font-size: .95rem;
+  box-shadow: var(--shadow-sm);
+}
+.jump button:active { transform: scale(.93); }
+
+.view-toggle { display: flex; gap: 6px; background: var(--card-2); padding: 4px; border-radius: 14px; border: 1px solid var(--line); }
+.view-toggle button {
+  flex: 1; border: 0; cursor: pointer; font-family: var(--font); font-weight: 850;
+  padding: 10px 12px; border-radius: 11px; background: transparent; color: var(--ink-soft);
+  min-height: 44px; font-size: .92rem;
+}
+.view-toggle button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+.chart-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+.tcard { border-radius: var(--radius); overflow: hidden; background: var(--card); box-shadow: var(--shadow); scroll-margin-top: 82px; }
+.tcard > header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  padding: 12px 16px; color: #fff;
+}
+.tcard > header b { font-size: 1.12rem; font-weight: 900; }
+.tcard > header span { font-size: .78rem; font-weight: 800; opacity: .95; }
+.tcard ul { list-style: none; margin: 0; padding: 8px 10px 12px; display: grid; gap: 2px; }
+.tcard li {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 8px; border-radius: 11px;
+  font-weight: 850; font-size: 1.02rem; font-variant-numeric: tabular-nums;
+}
+.tcard li:nth-child(even) { background: var(--card-2); }
+.tcard li .n { min-width: 2ch; text-align: right; }
+.tcard li .op { color: var(--ink-soft); font-weight: 700; }
+.tcard li .p { min-width: 3ch; text-align: left; color: var(--brand-1); font-weight: 900; }
+.tcard li .st { width: 1.2em; font-size: .8rem; text-align: center; }
+@media (prefers-color-scheme: dark) { .tcard li .p { color: #c3b2ff; } }
+.tcard li.done { background: linear-gradient(90deg, rgba(34,181,115,.14), rgba(34,181,115,.05)); }
+
+.grid-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.card.grid-wrap { padding: 14px 8px; }
+.gtable { border-collapse: separate; border-spacing: 2px; margin: 0 auto; }
+.gtable th, .gtable td {
+  width: clamp(24px, 7.4vw, 40px); height: clamp(24px, 7.4vw, 40px);
+  border-radius: 9px; text-align: center; font-weight: 850;
+  font-size: clamp(.6rem, 2.4vw, .84rem); font-variant-numeric: tabular-nums;
+  padding: 0;
+}
+.gtable thead th, .gtable tbody th { color: #fff; }
+.gtable .corner { background: transparent; color: var(--ink-soft); font-size: 1rem; }
+.gtable td { background: var(--card-2); color: var(--ink); }
+.gtable td.sq { background: linear-gradient(135deg, rgba(124,92,255,.22), rgba(255,107,169,.22)); color: var(--ink); font-weight: 900; }
+
 /* ---------- Térkép (hőtérkép) ---------- */
 .map-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .card.map-wrap { padding: 14px 8px; }

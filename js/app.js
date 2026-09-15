@@ -10,7 +10,7 @@
 
   var TITLES = {
     home: 'Szorzó Manó', tables: 'Táblaválasztás', learn: 'Felfedező',
-    result: 'Eredmény', map: 'Szorzó-térkép', stickers: 'Matricák',
+    result: 'Eredmény', map: 'Szorzó-térkép', charts: 'Szorzótáblák', stickers: 'Matricák',
     settings: 'Beállítások', quiz: 'Feladatok'
   };
 

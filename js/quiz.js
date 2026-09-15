@@ -27,6 +27,7 @@
       started: Date.now(),
       qStart: 0,
       answered: false,
+      paused: false,
       input: '',
       current: null,
       timeLeft: opts.seconds || 0,
@@ -66,6 +67,7 @@
 
   function startTimer() {
     var tick = function () {
+      if (Q.paused) return;           // hibamagyarázat közben áll az óra
       Q.timeLeft -= 0.1;
       if (Q.timeLeft <= 0) { Q.timeLeft = 0; finish(); return; }
       var bar = el('qTimer');
@@ -269,9 +271,12 @@
       if (S.settings.showHints) tip += '<div class="tip">💡 ' + F.hint(q.a, q.b) + '</div>';
     }
 
+    // Hibánál SOHA nincs automatikus továbblépés: a magyarázat addig marad,
+    // amíg a gyerek rá nem koppint a Tovább gombra. Villámkörben az óra is áll.
     var auto = ok && S.settings.autoAdvance && Q.mode !== 'exam';
+    if (!ok) Q.paused = true;
     var btn = auto ? '' : '<button class="btn ' + (ok ? 'btn-primary' : '') + ' btn-block" id="nextBtn" type="button">' +
-      (ok ? 'Tovább →' : 'Értem, mehet tovább →') + '</button>';
+      'Tovább →</button>';
 
     el('qFeed').innerHTML =
       '<div class="feedback ' + (ok ? 'good' : 'bad') + '">' +
@@ -285,13 +290,22 @@
       setTimeout(advance, 620);
     } else {
       var nb = el('nextBtn');
-      if (nb) nb.addEventListener('click', advance);
+      if (nb) {
+        nb.addEventListener('click', advance);
+        if (!ok) {
+          // A magyarázat legyen látható akkor is, ha a hajtás alá esne
+          try { nb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+          nb.focus({ preventScroll: true });
+        }
+      }
     }
   }
 
   function advance() {
     if (!Q) return;
+    Q.paused = false;
     Q.idx++;
+    if (Q.mode === 'flash' && Q.timeLeft <= 0) { finish(); return; }
     next();
   }
 
