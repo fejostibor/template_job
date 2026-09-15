@@ -55,7 +55,7 @@ self.addEventListener('fetch', function (e) {
 
   // Statikus fájlok: előbb a gyorsítótár, háttérben frissítés
   e.respondWith(
-    caches.match(req).then(function (cached) {
+    caches.match(req, { ignoreVary: true }).then(function (cached) {
       var net = fetch(req).then(function (res) {
         if (res && res.status === 200) {
           var copy = res.clone();

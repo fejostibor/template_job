@@ -16,6 +16,14 @@ npx http-server -p 8080 .
 Telefonon: nyisd meg a címet, majd **„Hozzáadás a kezdőképernyőhöz”**. Onnantól ikonról indul,
 teljes képernyőn, offline is.
 
+### Közzététel GitHub Pages-en
+
+A `.github/workflows/pages.yml` minden pusholásnál kiteszi az appot GitHub Pages-re
+(`https://<felhasználó>.github.io/<repo>/`). Az első futás be is kapcsolja a Pages-t,
+ha a repo beállításai engedik; ha nem, a **Settings → Pages → Source: GitHub Actions**
+beállítás után újra kell futtatni. Az app relatív útvonalakat használ, ezért alkönyvtárból
+kiszolgálva is működik — a service workerrel együtt.
+
 ## Mit tud
 
 | Mód | Mire jó |
