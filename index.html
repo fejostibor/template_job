@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+<title>Szorzó Manó – 1×1 gyakorló</title>
+<meta name="description" content="Játékos szorzótábla-gyakorló 1-től 10-ig, harmadikosoknak. Offline is működik." />
+<meta name="theme-color" content="#7C5CFF" />
+<meta name="color-scheme" content="light dark" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Szorzó Manó" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/favicon-64.png" sizes="64x64" type="image/png" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#app">Ugrás a tartalomhoz</a>
+
+  <header class="topbar" id="topbar">
+    <button class="icon-btn" id="backBtn" type="button" aria-label="Vissza" hidden>‹</button>
+    <div class="topbar-title" id="topTitle">Szorzó Manó</div>
+    <div class="topbar-stats" id="topStats">
+      <span class="chip chip-xp" id="chipLevel" title="Szint">⭐ 1</span>
+      <span class="chip chip-coin" id="chipCoins" title="Érmék">🪙 0</span>
+      <span class="chip chip-streak" id="chipStreak" title="Napi sorozat">🔥 0</span>
+    </div>
+  </header>
+
+  <main id="app" class="app" tabindex="-1"></main>
+
+  <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/state.js"></script>
+  <script src="js/facts.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/screens.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
