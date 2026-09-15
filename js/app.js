@@ -93,7 +93,8 @@
 
     go('home');
 
-    if ('serviceWorker' in navigator) {
+    // A service worker csak a saját, gyökérből kiszolgált telepítésnél kell.
+    if ('serviceWorker' in navigator && !global.SZ_NO_SW) {
       global.addEventListener('load', function () {
         navigator.serviceWorker.register('sw.js').catch(function () {});
       });
