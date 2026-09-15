@@ -276,7 +276,7 @@
     var auto = ok && S.settings.autoAdvance && Q.mode !== 'exam';
     if (!ok) Q.paused = true;
     var btn = auto ? '' : '<button class="btn ' + (ok ? 'btn-primary' : '') + ' btn-block" id="nextBtn" type="button">' +
-      (ok ? 'Tovább →' : 'Értem, mehet tovább →') + '</button>';
+      'Tovább →</button>';
 
     el('qFeed').innerHTML =
       '<div class="feedback ' + (ok ? 'good' : 'bad') + '">' +
