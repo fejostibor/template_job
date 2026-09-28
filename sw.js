@@ -1,6 +1,9 @@
 /* Szorzó Manó – service worker
-   Alkalmazás-héj gyorsítótárazása, hogy net nélkül is menjen. */
-var CACHE = 'szorzo-mano-v3';
+   Alkalmazás-héj gyorsítótárazása, hogy net nélkül is menjen.
+   FONTOS: a VERSION-t tartsd szinkronban a js/app.js APP_VERSION-jével –
+   az alkalmazás ebből tudja megmondani, friss-e a gyorsítótár. */
+var VERSION = '1.3.0';
+var CACHE = 'szorzo-mano-' + VERSION;
 var ASSETS = [
   './',
   './index.html',
@@ -22,8 +25,25 @@ var ASSETS = [
 
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }).then(function () { return self.skipWaiting(); })
+    caches.open(CACHE).then(function (c) {
+      // cache: 'reload' – a böngésző HTTP-gyorsítótárát megkerülve, mindig a
+      // szerverről töltjük le a fájlokat, különben a régi verzió rögzülhet.
+      return Promise.all(ASSETS.map(function (url) {
+        return fetch(new Request(url, { cache: 'reload' }))
+          .then(function (res) { if (res && res.ok) return c.put(url, res); })
+          .catch(function () { /* egy hiányzó fájl ne buktassa el a telepítést */ });
+      }));
+    }).then(function () { return self.skipWaiting(); })
   );
+});
+
+/* Az oldal kérdezhet verziót, és kérheti az azonnali átállást */
+self.addEventListener('message', function (e) {
+  var msg = e.data || {};
+  if (msg.type === 'SKIP_WAITING') { self.skipWaiting(); return; }
+  if (msg.type === 'GET_VERSION' && e.ports && e.ports[0]) {
+    e.ports[0].postMessage({ version: VERSION });
+  }
 });
 
 self.addEventListener('activate', function (e) {

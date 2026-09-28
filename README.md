@@ -111,6 +111,29 @@ A beállítások (hang, rezgés, napi cél) szándékosan nem utaznak: azok eszk
   így egy képernyőn elfér minden, görgetés nélkül.
 - **Fekvő telefon** (alacsony képernyő) – kisebb kérdés és gombok, hogy kiférjen.
 
+## Frissítés a telefonon
+
+Az app offline is működik, ezért a telefon egy service workerrel eltárolja magának —
+emiatt egy új kiadás nem jelenne meg magától. A kezelés:
+
+- **Automatikus.** Megnyitáskor (és visszatéréskor, illetve félóránként) az app megnézi,
+  van-e új verzió. Ha igen, letölti, és **egyszer, magától újratölti** magát a friss
+  kiadással. Egy megnyitás elég.
+- **Kör közben nem szakít félbe.** Ha épp feladatot old meg a gyerek, nem tölt újra,
+  hanem megjelenik egy „✨ Új verzió érkezett — Frissítés" sáv, ami bevárja a koppintást.
+- **Kézzel.** Beállítások → *Verzió és frissítés*: kiírja az alkalmazás és a tárolt
+  verziót (`v1.3.0 · tárolt: v1.3.0 ✅ naprakész`), és a **Frissítés keresése** gombbal
+  azonnal ellenőrizhető.
+
+Verziózás: az `sw.js` `VERSION` és a `js/app.js` `APP_VERSION` konstansát **együtt kell
+emelni** minden kiadásnál — a gyorsítótár neve ebből képződik, és az app ebből tudja
+megmondani, naprakész-e. A precache `cache: 'reload'`-dal tölt, tehát a böngésző HTTP-
+gyorsítótárát megkerülve mindig a szerverről.
+
+Ha valaki még a régi (frissítéskezelés nélküli) kiadáson van, annak **két megnyitás** kell:
+az első letölti az újat a háttérben, a második már azt indítja. Ettől a verziótól kezdve
+egy megnyitás elég.
+
 ## Technikai összefoglaló
 
 - Vanilla JS, keretrendszer és build lépés nélkül. Nincs külső hálózati hívás, nincs követés.
