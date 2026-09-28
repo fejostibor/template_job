@@ -140,6 +140,14 @@
     save();
   }
 
+  /* Importált mentés beállítása (másik eszközről áthozott haladás) */
+  function applyImport(obj) {
+    data = merge(DEFAULTS, obj || {});
+    rollDay();
+    saveNow();
+    return data;
+  }
+
   function reset() {
     data = clone(DEFAULTS);
     saveNow();
@@ -150,7 +158,7 @@
     get data() { return data; },
     get settings() { return data.settings; },
     get stats() { return data.stats; },
-    load: load, save: save, saveNow: saveNow, reset: reset,
+    load: load, save: save, saveNow: saveNow, reset: reset, applyImport: applyImport,
     today: today, dayDiff: dayDiff, rollDay: rollDay,
     registerPlay: registerPlay,
     addXp: addXp, addCoins: addCoins, countAnswer: countAnswer,

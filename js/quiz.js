@@ -59,9 +59,11 @@
           '<span class="pill" id="qScore">0 ✔</span>' +
         '</div>' +
         (Q.mode === 'flash' ? '<div class="timer-bar"><i id="qTimer" style="width:100%"></i></div>' : '') +
-        '<div id="qCard"></div>' +
-        '<div id="qAnswer"></div>' +
-        '<div id="qFeed"></div>' +
+        '<div class="quiz-main">' +
+          '<div id="qCard"></div>' +
+          '<div id="qAnswer"></div>' +
+          '<div id="qFeed"></div>' +
+        '</div>' +
       '</div>';
   }
 

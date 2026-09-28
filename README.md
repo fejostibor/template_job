@@ -43,6 +43,7 @@ workerrel és az offline móddal együtt.
 | 📋 **Szorzótáblák** | Mind a 10 tábla egy helyen, kétféle nézetben: táblánkénti listák (ugrósávval) és a teljes 10×10-es táblázat kiemelt négyzetszámokkal. Csillag jelöli, ami már biztosan megy. |
 | 🗺️ **Szorzó-térkép** | 10×10-es hőtérkép: egy pillantásra látszik, mi megy már és mi nem. |
 | 🎁 **Matricák** | 20 gyűjthető matrica érmékért, szintekért, sorozatért, vizsgákért. |
+| 🔄 **Haladás átvitele** | A gyerek haladásának átvitele másik telefonra vagy iPadre: rövid másolható kód vagy `.json` fájl. Felülírás vagy összefésülés (mindkét eszközből a jobbik érték). |
 | ⚙️ **Beállítások** | Hang, rezgés, tippek, napi cél, feladat/kör — és egy **szülői nézet** (pontosság, napi bontás, aktuális gyenge pontok). |
 
 ## A mögötte lévő módszertan
@@ -82,6 +83,34 @@ Hiba esetén sosem dorgál: „Semmi baj, nézzük meg együtt!”, utána a jó
 Jó válasznál változatos dicséret, sorozatnál külön visszajelzés, konfetti, hang és rezgés
 (mind kikapcsolható).
 
+## Haladás átvitele eszközök között
+
+Minden eszköz a saját böngészőjében tárol, tehát a telefonon gyűjtött haladás nem jelenik
+meg magától az iPaden. A **Beállítások → Haladás átvitele** képernyő két utat kínál:
+
+1. **Kód** – egy 444 karakteres, másolható szöveg (`SZM1…`), amit üzenetben átküldesz.
+   Ellenőrzőösszeget tartalmaz, így az elgépelt vagy félbevágott kódot az app visszautasítja.
+   Mindenhol működik, letöltés nélkül.
+2. **Fájl** – `.json` mentés, ami AirDroppal, e-mailben vagy felhőn át megy át.
+
+A betöltésnél két mód közül lehet választani:
+
+- **Betöltés** – felülírja az adott eszköz haladását (költözéshez ez a helyes).
+- **Összefésülés** – minden műveletnél és számlálónál a két eszköz közül a jobbik értéket
+  tartja meg, a matricákat egyesíti (ha mindkét eszközön gyakoroltak).
+
+A beállítások (hang, rezgés, napi cél) szándékosan nem utaznak: azok eszközfüggők.
+
+## Képernyőméretek
+
+- **Telefon** – egyoszlopos, nagy kezelőfelületek, 320 px-től.
+- **Tablet / iPad** (700 px-től, ha a magasság is legalább 600 px) – szélesebb tartalom
+  (940–1060 px), háromoszlopos menü, nagyobb betűk és gombok; a számbillentyűzet 460 px-re
+  fogva, középen marad, hogy kézbe essen.
+- **Fekvő iPad** (880 px-től) – a kérdés balra, a válaszlehetőségek/billentyűzet jobbra,
+  így egy képernyőn elfér minden, görgetés nélkül.
+- **Fekvő telefon** (alacsony képernyő) – kisebb kérdés és gombok, hogy kiférjen.
+
 ## Technikai összefoglaló
 
 - Vanilla JS, keretrendszer és build lépés nélkül. Nincs külső hálózati hívás, nincs követés.
@@ -96,6 +125,7 @@ css/styles.css        stílusok (világos + sötét)
 js/state.js           mentés, XP, érme, sorozat, napi cél
 js/facts.js           a tanulás motorja (Leitner, súlyozás, trükkök, feladatgenerálás)
 js/quiz.js            kérdés-motor (gyakorlás / villámkör / vizsga)
+js/transfer.js        haladás exportja/importja (kód + .json fájl)
 js/screens.js         képernyők
 js/app.js             útvonalkezelés, indítás, PWA-regisztráció
 sw.js                 service worker

@@ -570,6 +570,137 @@
     mount: function () {}
   };
 
+  /* ---------------- Haladás átvitele ---------------- */
+  var transfer = {
+    title: 'Haladás átvitele',
+    back: true,
+    html: function () {
+      var T = global.SZ.transfer;
+      var sum = T.summary(S.data);
+      return '' +
+      '<div class="stack fade-in">' +
+        '<div class="card card-soft">' +
+          '<h2>Haladás átvitele másik eszközre</h2>' +
+          '<p class="small muted" style="margin:8px 0 0">' +
+            'A gyerek haladása minden eszközön külön tárolódik. Itt átviheted: ' +
+            'a régi eszközön <b>mentesz</b>, az újon <b>betöltöd</b>. ' +
+            'A hang, napi cél és a többi beállítás eszközönként marad.' +
+          '</p>' +
+          '<div class="stat-grid" style="margin-top:14px">' +
+            '<div><div class="v">' + sum.answered + '</div><div class="k">Feladat</div></div>' +
+            '<div><div class="v">' + sum.mastered + '</div><div class="k">Tudott művelet</div></div>' +
+            '<div><div class="v">' + sum.stickers + '</div><div class="k">Matrica</div></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<h3>1. Kód – mindenhol működik</h3>' +
+          '<p class="small muted" style="margin:6px 0 12px">Másold ki, és küldd át üzenetben a másik eszközre.</p>' +
+          '<div class="stack">' +
+            '<button class="btn btn-primary btn-block" id="genCode" type="button">🔢 Kód készítése</button>' +
+            '<div id="codeOut"></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<h3>2. Fájl – AirDrop, e-mail, felhő</h3>' +
+          '<p class="small muted" style="margin:6px 0 12px">Egy .json fájl, amit átküldesz a másik eszközre.</p>' +
+          '<div class="stack">' +
+            '<button class="btn btn-block" id="saveFile" type="button">📄 Mentés fájlba</button>' +
+            '<button class="btn btn-block" id="pickFile" type="button">📂 Betöltés fájlból</button>' +
+            '<input type="file" id="fileInput" accept=".json,application/json" hidden />' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card">' +
+          '<h3>3. Kód beolvasása</h3>' +
+          '<p class="small muted" style="margin:6px 0 10px">Illeszd be ide a másik eszközön készült kódot.</p>' +
+          '<textarea id="codeIn" class="code-box" rows="4" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="SZM1..."></textarea>' +
+          '<div class="stack" style="margin-top:12px">' +
+            '<button class="btn btn-primary btn-block" id="doReplace" type="button">⬇️ Betöltés (felülírja az itteni haladást)</button>' +
+            '<button class="btn btn-ghost btn-block" id="doMerge" type="button">🔀 Összefésülés (mindkettőből a jobbik)</button>' +
+          '</div>' +
+          '<div id="importOut"></div>' +
+        '</div>' +
+      '</div>';
+    },
+    mount: function () {
+      var T = global.SZ.transfer;
+
+      $('genCode').addEventListener('click', function () {
+        var code = T.encode();
+        $('codeOut').innerHTML =
+          '<textarea class="code-box" id="codeText" rows="5" readonly>' + code + '</textarea>' +
+          '<button class="btn btn-block" id="copyCode" type="button" style="margin-top:10px">📋 Másolás</button>' +
+          '<p class="small muted" style="margin:10px 0 0">' + code.length + ' karakter. A másik eszközön a 3. pontba illeszd be.</p>';
+        var ta = $('codeText');
+        $('copyCode').addEventListener('click', function () {
+          ta.select();
+          ta.setSelectionRange(0, code.length);
+          T.copy(code, function (okc) {
+            FX.toast(okc ? 'Kód a vágólapon! 📋' : 'Jelöld ki és másold ki kézzel.');
+          });
+        });
+        FX.play('tap');
+      });
+
+      $('saveFile').addEventListener('click', function () {
+        try {
+          T.saveFile();
+          FX.toast('Mentés elindult. Ha nem indul el, használd a kódot.');
+        } catch (e) {
+          FX.toast('A letöltés itt nem engedélyezett – használd a kódot.');
+        }
+      });
+
+      $('pickFile').addEventListener('click', function () { $('fileInput').click(); });
+      $('fileInput').addEventListener('change', function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        T.readFile(f, function (err, obj) {
+          if (err) { report(err.message, false); return; }
+          runImport(obj, 'replace');
+        });
+      });
+
+      $('doReplace').addEventListener('click', function () { fromText('replace'); });
+      $('doMerge').addEventListener('click', function () { fromText('merge'); });
+
+      function fromText(mode) {
+        var raw = ($('codeIn').value || '').trim();
+        if (!raw) { report('Előbb illeszd be a kódot.', false); return; }
+        var obj;
+        try {
+          obj = (raw.charAt(0) === '{') ? JSON.parse(raw) : T.decode(raw);
+        } catch (err) {
+          report(err.message, false);
+          return;
+        }
+        runImport(obj, mode);
+      }
+
+      function runImport(obj, mode) {
+        if (mode === 'replace' && !global.confirm('Biztosan felülírod az ezen az eszközön lévő haladást?')) return;
+        var sum;
+        try { sum = T.apply(obj, mode); }
+        catch (err) { report(err.message, false); return; }
+        FX.play('win');
+        FX.confetti(60);
+        global.SZ.ui.syncTop();
+        report('Kész! ' + sum.answered + ' feladat, ' + sum.mastered + ' biztosan tudott művelet, ' +
+               sum.stickers + ' matrica, ' + sum.level + '. szint.', true);
+      }
+
+      function report(msg, good) {
+        $('importOut').innerHTML = '<div class="feedback ' + (good ? 'good' : 'bad') + '" style="margin-top:12px">' +
+          '<strong>' + (good ? '✅ ' : '⚠️ ') + msg + '</strong>' +
+          (good ? '<button class="btn btn-primary btn-block" id="goHomeAfter" type="button">🏠 Vissza a főoldalra</button>' : '') +
+          '</div>';
+        if (good) $('goHomeAfter').addEventListener('click', function () { global.SZ.ui.go('home'); });
+      }
+    }
+  };
+
   /* ---------------- Beállítások + szülői nézet ---------------- */
   var settings = {
     title: 'Beállítások',
@@ -621,6 +752,7 @@
           '</p>' +
         '</div>' +
 
+        '<button class="btn btn-block" id="transferBtn" type="button">🔄 Haladás átvitele másik eszközre</button>' +
         '<button class="btn btn-ghost btn-block" id="resetBtn" type="button">🗑️ Minden adat törlése</button>' +
         '<p class="small muted center">Szorzó Manó · offline is működik · v1.0</p>' +
       '</div>';
@@ -639,6 +771,7 @@
       bind('setAuto', 'autoAdvance');
       $('setPer').addEventListener('change', function (e) { S.settings.perRound = parseInt(e.target.value, 10); S.saveNow(); });
       $('setGoal').addEventListener('change', function (e) { S.settings.dailyGoal = parseInt(e.target.value, 10); S.saveNow(); });
+      $('transferBtn').addEventListener('click', function () { global.SZ.ui.go('transfer'); });
       $('resetBtn').addEventListener('click', function () {
         if (global.confirm('Biztosan törlöd az összes haladást? Ez nem vonható vissza.')) {
           S.reset();
@@ -656,7 +789,7 @@
 
   global.SZ.screens = {
     home: home, tables: tables, learn: learn, result: result,
-    map: map, charts: charts, stickers: stickers, settings: settings,
+    map: map, charts: charts, stickers: stickers, settings: settings, transfer: transfer,
     checkStickers: checkStickers, STICKERS: STICKERS
   };
 })(window);
