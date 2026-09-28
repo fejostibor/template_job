@@ -439,3 +439,132 @@ h3 { font-size: 1rem; font-weight: 800; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ---------- Haladás átvitele ---------- */
+.code-box {
+  width: 100%; box-sizing: border-box;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .78rem; line-height: 1.45; letter-spacing: .3px;
+  padding: 12px; border-radius: 14px;
+  border: 2px solid var(--line); background: var(--card-2); color: var(--ink);
+  resize: vertical; word-break: break-all;
+  -webkit-user-select: text; user-select: text;
+}
+.code-box:focus { outline: 3px solid var(--brand-1); outline-offset: 1px; border-color: transparent; }
+
+/* ===========================================================
+   Nagyobb kijelzők: tablet és iPad
+   =========================================================== */
+@media (min-width: 700px) and (min-height: 600px) {
+  :root { --tap: 58px; }
+
+  .app { max-width: 940px; padding: 24px 24px 56px; }
+  .stack { gap: 18px; }
+
+  h1 { font-size: 1.9rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.12rem; }
+  .small { font-size: .95rem; }
+
+  .topbar { padding-left: 24px; padding-right: 24px; }
+  .topbar-title { font-size: 1.2rem; }
+  .chip { font-size: .95rem; padding: 8px 14px; }
+  .icon-btn { width: 46px; height: 46px; font-size: 1.8rem; }
+
+  .card { padding: 22px; border-radius: 26px; }
+  .btn { font-size: 1.1rem; padding: 16px 24px; border-radius: 18px; }
+  .btn-lg { font-size: 1.3rem; padding: 22px 26px; }
+
+  .hero { padding: 26px; gap: 22px; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero p { font-size: 1.05rem; }
+  .mascot { width: 118px; height: 118px; }
+  .mascot-lg { width: 168px; height: 168px; }
+
+  .ring { width: 92px; height: 92px; }
+
+  .mode-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .mode { padding: 20px; }
+  .mode .emoji { font-size: 2.3rem; }
+  .mode strong { font-size: 1.1rem; }
+  .mode span { font-size: .9rem; }
+
+  .table-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .tbtn { min-height: 118px; font-size: 2rem; border-radius: 24px; }
+  .tbtn small { font-size: .82rem; }
+
+  .chart-grid { grid-template-columns: repeat(3, 1fr); }
+  .tcard li { font-size: 1.12rem; padding: 11px 8px; }
+  .tcard { scroll-margin-top: 96px; }
+  .jump button { width: 46px; height: 46px; font-size: 1.1rem; border-radius: 14px; }
+
+  .question { padding: 36px 24px; min-height: 190px; }
+  .question .q-text { font-size: 3.4rem; }
+  .question .q-hint { font-size: 1.05rem; max-width: 46ch; }
+  .q-type { font-size: .88rem; }
+
+  .opt { font-size: 2.1rem; padding: 26px 8px; border-radius: 22px; }
+  .key { font-size: 1.85rem; padding: 22px 0; border-radius: 20px; }
+  .keypad { gap: 14px; width: 100%; max-width: 460px; justify-self: center; margin-inline: auto; }
+  .answer-box { font-size: 3.2rem; min-height: 86px; border-radius: 20px; width: 100%; max-width: 460px; justify-self: center; margin-inline: auto; }
+  .opts { max-width: 680px; margin-inline: auto; }
+
+  .feedback { padding: 20px 22px; border-radius: 24px; }
+  .feedback strong { font-size: 1.25rem; }
+  .feedback .tip { font-size: 1.05rem; }
+
+  .stat-grid .v { font-size: 1.9rem; }
+  .stat-grid .k { font-size: .88rem; }
+  .result-stars { font-size: 4rem; }
+
+  .sticker-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 14px; }
+  .sticker { font-size: 2.8rem; border-radius: 22px; }
+
+  .set-row { padding: 16px 0; font-size: 1.05rem; }
+  .code-box { font-size: .9rem; }
+
+  .gtable th, .gtable td {
+    width: clamp(40px, 5.4vw, 58px); height: clamp(40px, 5.4vw, 58px);
+    font-size: clamp(.86rem, 1.5vw, 1.05rem); border-radius: 12px;
+  }
+  .cell { width: clamp(38px, 5vw, 52px); height: clamp(38px, 5vw, 52px); font-size: .86rem; border-radius: 12px; }
+  .map th { width: clamp(38px, 5vw, 52px); height: clamp(38px, 5vw, 52px); font-size: .92rem; }
+}
+
+/* Fekvő tablet: kérdés és válaszok egymás mellett, hogy kézbe essen mindkettő */
+@media (min-width: 880px) and (min-height: 600px) and (orientation: landscape) {
+  .quiz-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "card ans" "feed ans";
+    gap: 20px;
+    align-items: start;
+  }
+  .quiz-main > #qCard { grid-area: card; }
+  .quiz-main > #qAnswer { grid-area: ans; }
+  .quiz-main > #qFeed { grid-area: feed; }
+  .question { min-height: 300px; }
+  .question .q-text { font-size: 3.6rem; }
+  .opts { grid-template-columns: repeat(2, 1fr); max-width: none; gap: 18px; }
+  .opt { padding: 44px 8px; font-size: 2.4rem; }
+  .keypad { max-width: none; width: 100%; gap: 16px; }
+  .key { padding: 28px 0; font-size: 2.1rem; }
+  .answer-box { max-width: none; width: 100%; min-height: 104px; font-size: 3.6rem; }
+}
+
+/* Nagy iPad Pro / asztali gép */
+@media (min-width: 1180px) and (min-height: 600px) {
+  .app { max-width: 1060px; }
+  .question .q-text { font-size: 4rem; }
+}
+
+/* Alacsony, fekvő telefon: ne tolja ki a kérdést a képből */
+@media (orientation: landscape) and (max-height: 520px) {
+  .question { padding: 16px 12px; min-height: 0; }
+  .question .q-text { font-size: 2.2rem; }
+  .opt { font-size: 1.4rem; padding: 14px 8px; }
+  .key { font-size: 1.25rem; padding: 12px 0; }
+  .answer-box { font-size: 2rem; min-height: 54px; }
+  .hero { padding: 14px; }
+  .mascot { width: 68px; height: 68px; }
+}

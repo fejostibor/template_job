@@ -11,7 +11,7 @@
   var TITLES = {
     home: 'Szorzó Manó', tables: 'Táblaválasztás', learn: 'Felfedező',
     result: 'Eredmény', map: 'Szorzó-térkép', charts: 'Szorzótáblák', stickers: 'Matricák',
-    settings: 'Beállítások', quiz: 'Feladatok'
+    settings: 'Beállítások', transfer: 'Haladás átvitele', quiz: 'Feladatok'
   };
 
   function syncTop() {

@@ -1,6 +1,6 @@
 /* Szorzó Manó – service worker
    Alkalmazás-héj gyorsítótárazása, hogy net nélkül is menjen. */
-var CACHE = 'szorzo-mano-v2';
+var CACHE = 'szorzo-mano-v3';
 var ASSETS = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ var ASSETS = [
   './js/facts.js',
   './js/fx.js',
   './js/quiz.js',
+  './js/transfer.js',
   './js/screens.js',
   './js/app.js',
   './icons/icon-192.png',
