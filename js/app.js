@@ -5,7 +5,7 @@
   'use strict';
   var S = global.SZ.state, F = global.SZ.facts, FX = global.SZ.fx;
 
-  var APP_VERSION = '1.3.0';   // tartsd szinkronban az sw.js VERSION-jével
+  var APP_VERSION = '1.4.0';   // tartsd szinkronban az sw.js VERSION-jével
 
   var stack = [];          // [{name, params}]
   var current = null;

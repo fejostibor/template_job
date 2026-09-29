@@ -2,20 +2,20 @@
    Alkalmazás-héj gyorsítótárazása, hogy net nélkül is menjen.
    FONTOS: a VERSION-t tartsd szinkronban a js/app.js APP_VERSION-jével –
    az alkalmazás ebből tudja megmondani, friss-e a gyorsítótár. */
-var VERSION = '1.3.0';
+var VERSION = '1.4.0';
 var CACHE = 'szorzo-mano-' + VERSION;
 var ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './css/styles.css',
-  './js/state.js',
-  './js/facts.js',
-  './js/fx.js',
-  './js/quiz.js',
-  './js/transfer.js',
-  './js/screens.js',
-  './js/app.js',
+  './css/styles.css?v=1.4.0',
+  './js/state.js?v=1.4.0',
+  './js/facts.js?v=1.4.0',
+  './js/fx.js?v=1.4.0',
+  './js/quiz.js?v=1.4.0',
+  './js/transfer.js?v=1.4.0',
+  './js/screens.js?v=1.4.0',
+  './js/app.js?v=1.4.0',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-maskable-512.png',
@@ -61,9 +61,11 @@ self.addEventListener('fetch', function (e) {
   if (url.origin !== self.location.origin) return;
 
   if (req.mode === 'navigate') {
-    // Navigációnál: előbb a háló, ha nincs, a gyorsítótárból az index
+    // Navigációnál: előbb a háló (no-cache: mindig ellenőrizzük a szervernél,
+    // különben a böngésző HTTP-gyorsítótára régi index.html-t adhat), és csak
+    // offline esetén nyúlunk a tárolt példányhoz.
     e.respondWith(
-      fetch(req).then(function (res) {
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (res) {
         var copy = res.clone();
         caches.open(CACHE).then(function (c) { c.put('./index.html', copy); });
         return res;

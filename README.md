@@ -125,14 +125,28 @@ emiatt egy új kiadás nem jelenne meg magától. A kezelés:
   verziót (`v1.3.0 · tárolt: v1.3.0 ✅ naprakész`), és a **Frissítés keresése** gombbal
   azonnal ellenőrizhető.
 
-Verziózás: az `sw.js` `VERSION` és a `js/app.js` `APP_VERSION` konstansát **együtt kell
-emelni** minden kiadásnál — a gyorsítótár neve ebből képződik, és az app ebből tudja
-megmondani, naprakész-e. A precache `cache: 'reload'`-dal tölt, tehát a böngésző HTTP-
-gyorsítótárát megkerülve mindig a szerverről.
+### Miért frissül biztosan
 
-Ha valaki még a régi (frissítéskezelés nélküli) kiadáson van, annak **két megnyitás** kell:
-az első letölti az újat a háttérben, a második már azt indítja. Ettől a verziótól kezdve
-egy megnyitás elég.
+Három dolog együtt garantálja:
+
+1. **Verziózott fájlnevek.** Az `index.html` `?v=1.4.0`-val hivatkozik a JS/CSS fájlokra.
+   Egy új kiadásnál ezek *más URL-ek*, tehát a régi gyorsítótár fizikailag nem tud
+   régi fájlt adni rájuk — a böngésző kénytelen a szerverről hozni.
+2. **Az `index.html` mindig a hálóról jön** (`cache: 'no-cache'`), amíg van net; a tárolt
+   példányra csak offline esik vissza. Így a friss HTML mindig megérkezik, és az hozza
+   magával az új fájlneveket.
+3. **A precache is `cache: 'reload'`-dal tölt**, tehát a böngésző HTTP-gyorsítótárát
+   megkerülve mindig a szerverről.
+
+### Verzió emelése kiadáskor
+
+```bash
+python3 scripts/set-version.py 1.5.0
+```
+
+Ez egyszerre állítja az `index.html` hivatkozásait, az `sw.js` `VERSION`-jét és az
+ASSETS-listát, valamint a `js/app.js` `APP_VERSION`-jét. Kézzel ne írd át őket
+egyenként — ha elcsúsznak, a frissítés megbízhatatlanná válik.
 
 ## Technikai összefoglaló
 
@@ -153,6 +167,7 @@ js/screens.js         képernyők
 js/app.js             útvonalkezelés, indítás, PWA-regisztráció
 sw.js                 service worker
 scripts/generate-icons.py   ikongenerátor (külső függőség nélkül)
+scripts/set-version.py      verziószám beállítása minden érintett fájlban
 ```
 
 ## Források a módszertanhoz
