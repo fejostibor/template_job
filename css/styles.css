@@ -440,6 +440,30 @@ h3 { font-size: 1rem; font-weight: 800; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
+/* ---------- Frissítési sáv ---------- */
+.update-bar {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 80;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 10px 10px 18px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff; font-weight: 850; font-size: .95rem;
+  box-shadow: 0 10px 30px rgba(60, 30, 130, .35);
+  max-width: calc(100vw - 32px);
+  animation: slideUp .35s ease;
+}
+.update-bar button {
+  border: 0; cursor: pointer; font-family: var(--font); font-weight: 900;
+  padding: 10px 16px; border-radius: 999px; font-size: .92rem;
+  background: #fff; color: var(--brand-1); min-height: 40px;
+}
+.update-bar button#updateLater {
+  background: rgba(255, 255, 255, .22); color: #fff;
+  padding: 10px 13px; min-width: 40px;
+}
+.update-bar button:active { transform: scale(.94); }
+
 /* ---------- Haladás átvitele ---------- */
 .code-box {
   width: 100%; box-sizing: border-box;

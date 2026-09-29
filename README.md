@@ -111,6 +111,43 @@ A beállítások (hang, rezgés, napi cél) szándékosan nem utaznak: azok eszk
   így egy képernyőn elfér minden, görgetés nélkül.
 - **Fekvő telefon** (alacsony képernyő) – kisebb kérdés és gombok, hogy kiférjen.
 
+## Frissítés a telefonon
+
+Az app offline is működik, ezért a telefon egy service workerrel eltárolja magának —
+emiatt egy új kiadás nem jelenne meg magától. A kezelés:
+
+- **Automatikus.** Megnyitáskor (és visszatéréskor, illetve félóránként) az app megnézi,
+  van-e új verzió. Ha igen, letölti, és **egyszer, magától újratölti** magát a friss
+  kiadással. Egy megnyitás elég.
+- **Kör közben nem szakít félbe.** Ha épp feladatot old meg a gyerek, nem tölt újra,
+  hanem megjelenik egy „✨ Új verzió érkezett — Frissítés" sáv, ami bevárja a koppintást.
+- **Kézzel.** Beállítások → *Verzió és frissítés*: kiírja az alkalmazás és a tárolt
+  verziót (`v1.3.0 · tárolt: v1.3.0 ✅ naprakész`), és a **Frissítés keresése** gombbal
+  azonnal ellenőrizhető.
+
+### Miért frissül biztosan
+
+Három dolog együtt garantálja:
+
+1. **Verziózott fájlnevek.** Az `index.html` `?v=1.4.0`-val hivatkozik a JS/CSS fájlokra.
+   Egy új kiadásnál ezek *más URL-ek*, tehát a régi gyorsítótár fizikailag nem tud
+   régi fájlt adni rájuk — a böngésző kénytelen a szerverről hozni.
+2. **Az `index.html` mindig a hálóról jön** (`cache: 'no-cache'`), amíg van net; a tárolt
+   példányra csak offline esik vissza. Így a friss HTML mindig megérkezik, és az hozza
+   magával az új fájlneveket.
+3. **A precache is `cache: 'reload'`-dal tölt**, tehát a böngésző HTTP-gyorsítótárát
+   megkerülve mindig a szerverről.
+
+### Verzió emelése kiadáskor
+
+```bash
+python3 scripts/set-version.py 1.5.0
+```
+
+Ez egyszerre állítja az `index.html` hivatkozásait, az `sw.js` `VERSION`-jét és az
+ASSETS-listát, valamint a `js/app.js` `APP_VERSION`-jét. Kézzel ne írd át őket
+egyenként — ha elcsúsznak, a frissítés megbízhatatlanná válik.
+
 ## Technikai összefoglaló
 
 - Vanilla JS, keretrendszer és build lépés nélkül. Nincs külső hálózati hívás, nincs követés.
@@ -130,6 +167,7 @@ js/screens.js         képernyők
 js/app.js             útvonalkezelés, indítás, PWA-regisztráció
 sw.js                 service worker
 scripts/generate-icons.py   ikongenerátor (külső függőség nélkül)
+scripts/set-version.py      verziószám beállítása minden érintett fájlban
 ```
 
 ## Források a módszertanhoz

@@ -754,7 +754,15 @@
 
         '<button class="btn btn-block" id="transferBtn" type="button">🔄 Haladás átvitele másik eszközre</button>' +
         '<button class="btn btn-ghost btn-block" id="resetBtn" type="button">🗑️ Minden adat törlése</button>' +
-        '<p class="small muted center">Szorzó Manó · offline is működik · v1.0</p>' +
+        '<div class="card card-soft">' +
+          '<h3>Verzió és frissítés</h3>' +
+          '<p class="small muted" id="verLine" style="margin:8px 0 12px">Betöltés…</p>' +
+          '<button class="btn btn-block" id="checkUpd" type="button">🔄 Frissítés keresése</button>' +
+          '<p class="small muted" style="margin:10px 0 0">' +
+            'Az app offline is működik, ezért a telefon eltárolja magának. Új verzió esetén ' +
+            'magától frissül – ezzel a gombbal azonnal megnézheted.' +
+          '</p>' +
+        '</div>' +
       '</div>';
     },
     mount: function () {
@@ -772,6 +780,42 @@
       $('setPer').addEventListener('change', function (e) { S.settings.perRound = parseInt(e.target.value, 10); S.saveNow(); });
       $('setGoal').addEventListener('change', function (e) { S.settings.dailyGoal = parseInt(e.target.value, 10); S.saveNow(); });
       $('transferBtn').addEventListener('click', function () { global.SZ.ui.go('transfer'); });
+      // Verziósor: az app és a gyorsítótár verziója
+      (function () {
+        var line = $('verLine');
+        var UI = global.SZ.ui;
+        UI.swVersion(function (sw) {
+          var txt = 'Alkalmazás: v' + UI.version;
+          if (sw === null) txt += ' · offline tárolás nincs bekapcsolva';
+          else if (!sw) txt += ' · a tárolt verzió nem elérhető';
+          else if (sw === UI.version) txt += ' · tárolt: v' + sw + ' ✅ naprakész';
+          else txt += ' · tárolt: v' + sw + ' ⚠️ frissítés vár';
+          if (line) line.textContent = txt;
+        });
+      })();
+
+      $('checkUpd').addEventListener('click', function () {
+        var btn = $('checkUpd');
+        btn.disabled = true;
+        btn.textContent = '⏳ Keresés…';
+        global.SZ.ui.checkUpdate(function (state, worker) {
+          btn.disabled = false;
+          btn.textContent = '🔄 Frissítés keresése';
+          if (state === 'ready') {
+            FX.toast('Új verzió letöltve – frissítés…');
+            global.SZ.ui.applyUpdate(worker);
+          } else if (state === 'downloading') {
+            FX.toast('Új verzió letöltése folyamatban – mindjárt frissül.');
+          } else if (state === 'current') {
+            FX.toast('Már a legfrissebb verziót használod. ✅');
+          } else if (state === 'offline') {
+            FX.toast('Nincs net – frissítéshez internet kell.');
+          } else {
+            FX.toast('Ezen a felületen nincs offline tárolás.');
+          }
+        });
+      });
+
       $('resetBtn').addEventListener('click', function () {
         if (global.confirm('Biztosan törlöd az összes haladást? Ez nem vonható vissza.')) {
           S.reset();
